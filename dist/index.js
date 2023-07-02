@@ -37,12 +37,10 @@ const HTTP_STATUSES = {
 };
 const parserMiddleware = (0, body_parser_1.default)({});
 app.use(parserMiddleware);
-app.get('/hometask_01/api/videos', (req, res) => {
-    res
-        .send(videos)
-        .sendStatus(HTTP_STATUSES.OK200);
+app.get('/videos', (req, res) => {
+    res.send(videos);
 });
-app.get('/hometask_01/api/videos/:id', (req, res) => {
+app.get('/videos/:id', (req, res) => {
     let foundVideo = videos.find(v => v.id === +req.params.id);
     if (foundVideo) {
         res
@@ -53,7 +51,7 @@ app.get('/hometask_01/api/videos/:id', (req, res) => {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 });
-app.delete('/hometask_01/api/videos/:id', (req, res) => {
+app.delete('/videos/:id', (req, res) => {
     for (let i = 0; i < videos.length; i++) {
         if (videos[i].id === +req.params.id) {
             videos.splice(i, 1);
@@ -69,7 +67,7 @@ app.delete('/testing/all-data', (req, res) => {
     videos.splice(-1, 0);
     res.sendStatus(HTTP_STATUSES.NO_CONTENT);
 });
-app.put('/hometask_01/api/videos/:id', (req, res) => {
+app.put('/videos/:id', (req, res) => {
     const id = +req.params.id;
     const title = req.body.title;
     const author = req.body.author;
@@ -101,29 +99,40 @@ app.put('/hometask_01/api/videos/:id', (req, res) => {
             "field": "minAgeRestriction"
         });
     }
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined) {
+    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
         errorResult.push({
             "message": "canBeDownloaded",
             "field": "canBeDownloaded"
+        });
+    }
+    if (availableResolutions && typeof availableResolutions !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"
         });
     }
     if (typeof publicationDate !== 'string') {
         errorResult.push({
-            "message": "canBeDownloaded",
-            "field": "canBeDownloaded"
+            "message": "Should be a string",
+            "field": "publicationDate"
         });
     }
-    if (availableResolutions)
-        if (errorResult.length > 0) {
-            res
-                .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
-                .send({ errorsMessages: errorResult });
-            return;
-        }
+    if (errorResult.length > 0) {
+        res
+            .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+            .send({ errorsMessages: errorResult });
+        return;
+    }
+    video.title = title;
+    video.author = author;
 });
-app.post('/hometask_01/api/videos/', (req, res) => {
-    let author = req.body.author;
-    let title = req.body.title;
+app.post('/videos', (req, res) => {
+    const title = req.body.title;
+    const author = req.body.author;
+    const availableResolutions = req.body.availableResolutions;
+    const canBeDownloaded = req.body.canBeDownloaded;
+    const minAgeRestriction = req.body.minAgeRestriction;
+    const publicationDate = req.body.publicationDate;
     let errorResult = [];
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
         errorResult.push({
@@ -135,6 +144,30 @@ app.post('/hometask_01/api/videos/', (req, res) => {
         errorResult.push({
             "message": "Incorrect title",
             "field": "title"
+        });
+    }
+    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+        errorResult.push({
+            "message": "minAgeRestriction",
+            "field": "minAgeRestriction"
+        });
+    }
+    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
+        errorResult.push({
+            "message": "canBeDownloaded",
+            "field": "canBeDownloaded"
+        });
+    }
+    if (availableResolutions && typeof availableResolutions !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"
+        });
+    }
+    if (typeof publicationDate !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"
         });
     }
     if (errorResult.length > 0) {

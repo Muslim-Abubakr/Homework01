@@ -140,12 +140,18 @@ app.put('/videos/:id', (req: Request, res: Response) => {
             return;
       }
 
-    video.title = title
-    video.author = author
+      video.title = title
+      video.author = author
+      video.minAgeRestriction = minAgeRestriction
+      video.canBeDownloaded = canBeDownloaded
+      video.availableResolutions = availableResolutions
+      video.publicationDate = publicationDate
+  
+      res.sendStatus(HTTP_STATUSES.OK200)
 
 })
 
-app.post('/videos/', (req: Request, res: Response) => {
+app.post('/hometask_01/api/videos', (req: Request, res: Response) => {
     const title = req.body.title
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
