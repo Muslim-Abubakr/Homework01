@@ -1,7 +1,6 @@
 import express, {Request, Response} from 'express'
 import bodyParser from 'body-parser'
 
-
 const app = express()
 const port = process.env.port || 5000
 
@@ -128,7 +127,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
             })
         }
 
-    if ()
+
 
     if (errorResult.length > 0) {
         res

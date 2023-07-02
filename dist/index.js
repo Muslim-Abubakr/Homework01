@@ -113,13 +113,12 @@ app.put('/videos/:id', (req, res) => {
             "field": "canBeDownloaded"
         });
     }
-    if ()
-        if (errorResult.length > 0) {
-            res
-                .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
-                .send({ errorsMessages: errorResult });
-            return;
-        }
+    if (errorResult.length > 0) {
+        res
+            .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+            .send({ errorsMessages: errorResult });
+        return;
+    }
 });
 app.post('/videos/', (req, res) => {
     let author = req.body.author;
