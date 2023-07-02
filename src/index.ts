@@ -151,7 +151,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
 
 })
 
-app.post('/hometask_01/api/videos', (req: Request, res: Response) => {
+app.post('/videos', (req: Request, res: Response) => {
     const title = req.body.title
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
