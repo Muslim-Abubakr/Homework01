@@ -39,13 +39,13 @@ const HTTP_STATUSES = {
 const parserMiddleware = bodyParser({})
 app.use(parserMiddleware)
 
-app.get('/videos', (req: Request, res: Response) => {
+app.get('/hometask_01/api/videos', (req: Request, res: Response) => {
     res
         .send(videos)
         .sendStatus(HTTP_STATUSES.OK200)
 })
 
-app.get('/videos/:id', (req: Request, res: Response) => {
+app.get('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
     let foundVideo = videos.find(v => v.id === +req.params.id)
 
     if (foundVideo) {
@@ -57,7 +57,7 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     }
 })
 
-app.delete('/videos/:id', (req: Request, res: Response) => {
+app.delete('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
     for (let i = 0; i < videos.length; i++) {
         if (videos[i].id === +req.params.id) {
             videos.splice(i, 1)
@@ -74,7 +74,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
     res.sendStatus(HTTP_STATUSES.NO_CONTENT)
 })
 
-app.put('/videos/:id', (req: Request, res: Response) => {
+app.put('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     const title = req.body.title
@@ -140,7 +140,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
 
 })
 
-app.post('/videos/', (req: Request, res: Response) => {
+app.post('/hometask_01/api/videos/', (req: Request, res: Response) => {
     let author = req.body.author
     let title = req.body.title
 

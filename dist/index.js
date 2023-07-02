@@ -37,12 +37,12 @@ const HTTP_STATUSES = {
 };
 const parserMiddleware = (0, body_parser_1.default)({});
 app.use(parserMiddleware);
-app.get('/videos', (req, res) => {
+app.get('/hometask_01/api/videos', (req, res) => {
     res
         .send(videos)
         .sendStatus(HTTP_STATUSES.OK200);
 });
-app.get('/videos/:id', (req, res) => {
+app.get('/hometask_01/api/videos/:id', (req, res) => {
     let foundVideo = videos.find(v => v.id === +req.params.id);
     if (foundVideo) {
         res
@@ -53,7 +53,7 @@ app.get('/videos/:id', (req, res) => {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 });
-app.delete('/videos/:id', (req, res) => {
+app.delete('/hometask_01/api/videos/:id', (req, res) => {
     for (let i = 0; i < videos.length; i++) {
         if (videos[i].id === +req.params.id) {
             videos.splice(i, 1);
@@ -69,7 +69,7 @@ app.delete('/testing/all-data', (req, res) => {
     videos.splice(-1, 0);
     res.sendStatus(HTTP_STATUSES.NO_CONTENT);
 });
-app.put('/videos/:id', (req, res) => {
+app.put('/hometask_01/api/videos/:id', (req, res) => {
     const id = +req.params.id;
     const title = req.body.title;
     const author = req.body.author;
@@ -120,7 +120,7 @@ app.put('/videos/:id', (req, res) => {
         return;
     }
 });
-app.post('/videos/', (req, res) => {
+app.post('/hometask_01/api/videos/', (req, res) => {
     let author = req.body.author;
     let title = req.body.title;
     let errorResult = [];
