@@ -39,13 +39,11 @@ const HTTP_STATUSES = {
 const parserMiddleware = bodyParser({})
 app.use(parserMiddleware)
 
-app.get('/hometask_01/api/videos', (req: Request, res: Response) => {
-    res
-        .send(videos)
-        .sendStatus(HTTP_STATUSES.OK200)
+app.get('/videos', (req: Request, res: Response) => {
+    res.send(videos)
 })
 
-app.get('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
+app.get('/videos/:id', (req: Request, res: Response) => {
     let foundVideo = videos.find(v => v.id === +req.params.id)
 
     if (foundVideo) {
@@ -57,7 +55,7 @@ app.get('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
     }
 })
 
-app.delete('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
+app.delete('/videos/:id', (req: Request, res: Response) => {
     for (let i = 0; i < videos.length; i++) {
         if (videos[i].id === +req.params.id) {
             videos.splice(i, 1)
@@ -74,7 +72,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
     res.sendStatus(HTTP_STATUSES.NO_CONTENT)
 })
 
-app.put('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
+app.put('/videos/:id', (req: Request, res: Response) => {
     const id = +req.params.id
 
     const title = req.body.title
@@ -114,20 +112,26 @@ app.put('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
         })
     }
 
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined) {
+    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
         errorResult.push({
             "message": "canBeDownloaded",
             "field": "canBeDownloaded"  
         })
     }
+
+    if (availableResolutions && typeof availableResolutions !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"  
+        })
+    }
+
     if (typeof publicationDate !== 'string') {
-            errorResult.push({
-                "message": "canBeDownloaded",
-                "field": "canBeDownloaded"  
-            })
-        }
-
-
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"  
+        })
+    }
 
     if (errorResult.length > 0) {
         res
@@ -136,13 +140,15 @@ app.put('/hometask_01/api/videos/:id', (req: Request, res: Response) => {
             return;
       }
 
-      
-
 })
 
-app.post('/hometask_01/api/videos/', (req: Request, res: Response) => {
-    let author = req.body.author
-    let title = req.body.title
+app.post('/videos/', (req: Request, res: Response) => {
+    const title = req.body.title
+    const author = req.body.author
+    const availableResolutions = req.body.availableResolutions
+    const canBeDownloaded = req.body.canBeDownloaded
+    const minAgeRestriction = req.body.minAgeRestriction
+    const publicationDate = req.body.publicationDate
 
     let errorResult = []
 
@@ -160,12 +166,41 @@ app.post('/hometask_01/api/videos/', (req: Request, res: Response) => {
         })
       }
 
+      if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+        errorResult.push({
+            "message": "minAgeRestriction",
+            "field": "minAgeRestriction"  
+        })
+    }
+
+    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
+        errorResult.push({
+            "message": "canBeDownloaded",
+            "field": "canBeDownloaded"  
+        })
+    }
+
+    if (availableResolutions && typeof availableResolutions !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"  
+        })
+    }
+
+    if (typeof publicationDate !== 'string') {
+        errorResult.push({
+            "message": "Should be a string",
+            "field": "publicationDate"  
+        })
+    }
+
       if(errorResult.length > 0) {
         res
             .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
             .send({errorsMessages: errorResult})
             return;
       }
+
 
       const newVideo = {
         "id": +(new Date()),
