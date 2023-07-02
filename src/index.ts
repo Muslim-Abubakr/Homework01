@@ -140,6 +140,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
             return;
       }
 
+    video.title = title
+    video.author = author
+
 })
 
 app.post('/videos/', (req: Request, res: Response) => {
@@ -159,14 +162,14 @@ app.post('/videos/', (req: Request, res: Response) => {
         })
       }
 
-      if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
+    if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
         errorResult.push({
             "message": "Incorrect title",
             "field": "title"
         })
       }
 
-      if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
         errorResult.push({
             "message": "minAgeRestriction",
             "field": "minAgeRestriction"  
@@ -194,30 +197,30 @@ app.post('/videos/', (req: Request, res: Response) => {
         })
     }
 
-      if(errorResult.length > 0) {
-        res
-            .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
-            .send({errorsMessages: errorResult})
-            return;
-      }
+    if(errorResult.length > 0) {
+    res
+        .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+        .send({errorsMessages: errorResult})
+        return;
+    }
 
 
-      const newVideo = {
-        "id": +(new Date()),
-        "title": title,
-        "author": author,
-        "canBeDownloaded": false,
-        "minAgeRestriction": null,
-        "createdAt": new Date().toISOString(),
-        "publicationDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-        "availableResolutions": permissionValues
-      }
+    const newVideo = {
+    "id": +(new Date()),
+    "title": title,
+    "author": author,
+    "canBeDownloaded": false,
+    "minAgeRestriction": null,
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
+    "availableResolutions": permissionValues
+    }
 
-      videos.push(newVideo)
-      
-      res
-        .sendStatus(HTTP_STATUSES.CREATED_201)
-        .send(newVideo)
+    videos.push(newVideo)
+    
+    res
+    .sendStatus(HTTP_STATUSES.CREATED_201)
+    .send(newVideo)
 
 })
 
