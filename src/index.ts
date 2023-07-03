@@ -51,7 +51,7 @@ app.get('/videos/:id', (req: Request, res: Response) => {
             .status(HTTP_STATUSES.OK200)
             .send(foundVideo)
     } else {
-        res.status(HTTP_STATUSES.NOT_FOUND_404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }
 })
 
@@ -59,11 +59,11 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
     const video = videos.find(v => v.id === +req.params.id)
 
     if(!video) {
-        return res.status(404)
+        return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }
 
     videos = videos.filter(v => v.id !== video.id)
-    return res.status(204)
+    return res.sendStatus(204)
     // for (let i = 0; i < videos.length; i++) {
     //     if (videos[i].id === +req.params.id) {
     //         videos.splice(i, 1)
@@ -95,7 +95,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === id)
 
     if (!video) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
 
@@ -155,7 +155,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       video.availableResolutions = availableResolutions
       video.publicationDate = publicationDate
   
-      res.status(HTTP_STATUSES.OK200)
+      res.sendStatus(HTTP_STATUSES.OK200)
 
 })
 
