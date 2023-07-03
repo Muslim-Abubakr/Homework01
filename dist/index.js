@@ -147,26 +147,26 @@ app.post('/videos', (req, res) => {
     }
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
         errorResult.push({
-            "message": "Incorrect title",
-            "field": "title"
+            "message": "Incorrect author",
+            "field": "author"
         });
     }
-    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+    if (minAgeRestriction < 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== 'number') {
         errorResult.push({
             "message": "minAgeRestriction",
             "field": "minAgeRestriction"
         });
     }
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
+    if (typeof canBeDownloaded !== 'boolean' && canBeDownloaded === undefined) {
         errorResult.push({
             "message": "canBeDownloaded",
             "field": "canBeDownloaded"
         });
     }
-    if (availableResolutions && typeof availableResolutions !== 'string') {
+    if (typeof availableResolutions !== 'string') {
         errorResult.push({
             "message": "Should be a string",
-            "field": "publicationDate"
+            "field": "availableResolutions"
         });
     }
     if (typeof publicationDate !== 'string') {

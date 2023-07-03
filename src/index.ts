@@ -48,27 +48,35 @@ app.get('/videos/:id', (req: Request, res: Response) => {
 
     if (foundVideo) {
         res
+            .status(HTTP_STATUSES.OK200)
             .send(foundVideo)
-            .sendStatus(HTTP_STATUSES.OK200)
     } else {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        res.status(HTTP_STATUSES.NOT_FOUND_404)
     }
 })
 
 app.delete('/videos/:id', (req: Request, res: Response) => {
-    for (let i = 0; i < videos.length; i++) {
-        if (videos[i].id === +req.params.id) {
-            videos.splice(i, 1)
-            res.sendStatus(HTTP_STATUSES.NO_CONTENT)
-            return;
-        } else {
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
-        }
+    const video = videos.find(v => v.id === +req.params.id)
+
+    if(!video) {
+        return res.status(404)
     }
+
+    videos = videos.filter(v => v.id !== video.id)
+    return res.status(204)
+    // for (let i = 0; i < videos.length; i++) {
+    //     if (videos[i].id === +req.params.id) {
+    //         videos.splice(i, 1)
+    //         res.sendStatus(HTTP_STATUSES.NO_CONTENT)
+    //         return;
+    //     } else {
+    //         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    //     }
+    // }
 })
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-    videos.splice(-1, 0)
+    videos = []
     res.sendStatus(HTTP_STATUSES.NO_CONTENT)
 })
 
@@ -87,7 +95,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === id)
 
     if (!video) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        res.status(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
 
@@ -105,14 +113,14 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         })
     }
 
-    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+    if (minAgeRestriction.length < 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
         errorResult.push({
             "message": "minAgeRestriction",
             "field": "minAgeRestriction"  
         })
     }
 
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
+    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded === undefined) {
         errorResult.push({
             "message": "canBeDownloaded",
             "field": "canBeDownloaded"  
@@ -135,7 +143,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
 
     if (errorResult.length > 0) {
         res
-            .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+            .status(HTTP_STATUSES.BAD_REQUEST_400)
             .send({errorsMessages: errorResult})
             return;
       }
@@ -147,7 +155,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       video.availableResolutions = availableResolutions
       video.publicationDate = publicationDate
   
-      res.sendStatus(HTTP_STATUSES.OK200)
+      res.status(HTTP_STATUSES.OK200)
 
 })
 
@@ -170,46 +178,45 @@ app.post('/videos', (req: Request, res: Response) => {
 
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
         errorResult.push({
-            "message": "Incorrect title",
-            "field": "title"
+            "message": "Incorrect author",
+            "field": "author"
         })
       }
 
-    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
-        errorResult.push({
-            "message": "minAgeRestriction",
-            "field": "minAgeRestriction"  
-        })
-    }
+    // if (minAgeRestriction < 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== 'number') {
+    //     errorResult.push({
+    //         "message": "minAgeRestriction",
+    //         "field": "minAgeRestriction"  
+    //     })
+    // }
 
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded !== undefined || !canBeDownloaded) {
-        errorResult.push({
-            "message": "canBeDownloaded",
-            "field": "canBeDownloaded"  
-        })
-    }
+    // if (typeof canBeDownloaded !== 'boolean' && canBeDownloaded === undefined) {
+    //     errorResult.push({
+    //         "message": "canBeDownloaded",
+    //         "field": "canBeDownloaded"  
+    //     })
+    // }
 
-    if (availableResolutions && typeof availableResolutions !== 'string') {
+    if (typeof availableResolutions !== 'string') {
         errorResult.push({
             "message": "Should be a string",
-            "field": "publicationDate"  
+            "field": "availableResolutions"  
         })
     }
 
-    if (typeof publicationDate !== 'string') {
-        errorResult.push({
-            "message": "Should be a string",
-            "field": "publicationDate"  
-        })
-    }
+    // if (typeof publicationDate !== 'string') {
+    //     errorResult.push({
+    //         "message": "Should be a string",
+    //         "field": "publicationDate"  
+    //     })
+    // }
 
     if(errorResult.length > 0) {
     res
-        .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+        .status(HTTP_STATUSES.BAD_REQUEST_400)
         .send({errorsMessages: errorResult})
         return;
     }
-
 
     const newVideo = {
     "id": +(new Date()),
@@ -219,14 +226,13 @@ app.post('/videos', (req: Request, res: Response) => {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-    "availableResolutions": permissionValues
+    "availableResolutions": availableResolutions
     }
 
     videos.push(newVideo)
-    
     res
-    .sendStatus(HTTP_STATUSES.CREATED_201)
-    .send(newVideo)
+        .status(HTTP_STATUSES.CREATED_201)
+        .send(newVideo)
 
 })
 
