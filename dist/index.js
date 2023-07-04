@@ -136,7 +136,9 @@ app.put('/videos/:id', (req, res) => {
     video.availableResolutions = availableResolutions;
     video.publicationDate = publicationDate;
     if (errorResult.length == 0) {
-        res.sendStatus(HTTP_STATUSES.OK200);
+        res
+            .status(HTTP_STATUSES.OK200)
+            .send(HTTP_STATUSES.NO_CONTENT);
     }
 });
 app.post('/videos', (req, res) => {

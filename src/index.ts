@@ -148,7 +148,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       video.publicationDate = publicationDate
       
       if (errorResult.length == 0) {
-        res.sendStatus(HTTP_STATUSES.OK200)
+        res
+            .status(HTTP_STATUSES.OK200)
+            .send(HTTP_STATUSES.NO_CONTENT)
       }
       
 
