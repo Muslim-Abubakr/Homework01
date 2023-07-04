@@ -27,7 +27,17 @@ let videos = [{
         "availableResolutions": ["P144"]
     }
 ];
-const permissionValues = ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"];
+var permissionValues;
+(function (permissionValues) {
+    permissionValues["P144"] = "P144";
+    permissionValues["P240"] = "P240";
+    permissionValues["P360"] = "P360";
+    permissionValues["P480"] = "P480";
+    permissionValues["P720"] = "P720";
+    permissionValues["P1080"] = "P1080";
+    permissionValues["P1440"] = "P1440";
+    permissionValues["P2160"] = "P2160";
+})(permissionValues || (permissionValues = {}));
 const HTTP_STATUSES = {
     OK200: 200,
     CREATED_201: 201,
@@ -74,7 +84,7 @@ app.put('/videos/:id', (req, res) => {
     let errorResult = [];
     let video = videos.find(v => v.id === id);
     if (!video) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT);
         return;
     }
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
@@ -95,13 +105,13 @@ app.put('/videos/:id', (req, res) => {
             "field": "minAgeRestriction"
         });
     }
-    if (typeof canBeDownloaded !== 'boolean' || typeof canBeDownloaded === undefined) {
+    if (typeof canBeDownloaded !== 'boolean') {
         errorResult.push({
             "message": "incorrect canBeDownloaded",
             "field": "canBeDownloaded"
         });
     }
-    if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions)) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
         errorResult.push({
             "message": "Should be a array",
             "field": "availableResolutions"
@@ -144,7 +154,7 @@ app.post('/videos', (req, res) => {
             "field": "author"
         });
     }
-    if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions)) {
+    if (!Array.isArray(availableResolutions) && !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
         errorResult.push({
             "message": "Should be an array",
             "field": "availableResolutions"

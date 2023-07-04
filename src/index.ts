@@ -25,7 +25,7 @@ let videos = [{
 }
 ]
 
-const permissionValues = ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"]
+enum permissionValues {P144 = "P144", P240 = "P240", P360 = "P360", P480 = "P480", P720 = "P720", P1080 = "P1080", P1440 = "P1440", P2160 = "P2160"}
 
 const HTTP_STATUSES = {
     OK200: 200,
@@ -87,7 +87,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === id)
 
     if (!video) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT)
         return;
     }
 
@@ -112,14 +112,14 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         })
     }
 
-    if (typeof canBeDownloaded !== 'boolean' || typeof canBeDownloaded === undefined) {
+    if (typeof canBeDownloaded !== 'boolean') {
         errorResult.push({
             "message": "incorrect canBeDownloaded",
             "field": "canBeDownloaded"  
         })
     }
 
-    if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions)) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
         errorResult.push({
             "message": "Should be a array",
             "field": "availableResolutions"  
@@ -146,7 +146,8 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       video.canBeDownloaded = canBeDownloaded
       video.availableResolutions = availableResolutions
       video.publicationDate = publicationDate
-  
+      
+
       res.sendStatus(HTTP_STATUSES.OK200)
 
 })
@@ -173,7 +174,7 @@ app.post('/videos', (req: Request, res: Response) => {
         })
       }
 
-    if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions) ) {
+    if (!Array.isArray(availableResolutions) && !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
         errorResult.push({
             "message": "Should be an array",
             "field": "availableResolutions"  
