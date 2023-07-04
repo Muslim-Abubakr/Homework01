@@ -173,7 +173,7 @@ app.post('/videos', (req, res) => {
         "canBeDownloaded": false,
         "minAgeRestriction": null,
         "createdAt": new Date().toISOString(),
-        "publicationDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
+        "publicationDate": new Date(new Date().setDate(new Date().getDate())).toISOString(),
         "availableResolutions": availableResolutions
     };
     videos.push(newVideo);
