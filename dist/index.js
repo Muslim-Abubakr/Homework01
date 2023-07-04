@@ -137,8 +137,7 @@ app.put('/videos/:id', (req, res) => {
     video.publicationDate = publicationDate;
     if (errorResult.length == 0) {
         res
-            .status(HTTP_STATUSES.OK200)
-            .send(HTTP_STATUSES.NO_CONTENT);
+            .sendStatus(HTTP_STATUSES.NO_CONTENT);
     }
 });
 app.post('/videos', (req, res) => {
