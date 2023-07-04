@@ -189,14 +189,18 @@ app.post('/videos', (req: Request, res: Response) => {
         return;
     }
 
+    const currentDate = new Date();
+    const newDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+    const isoDate = newDate.toISOString();
+    
     const newVideo = {
         "id": +(new Date()),
         "title": title,
         "author": author,
         "canBeDownloaded": false,
         "minAgeRestriction": null,
-        "createdAt": new Date().toISOString(),
-        "publicationDate": new Date().toISOString(),
+        "createdAt": isoDate,
+        "publicationDate": isoDate,
         "availableResolutions": availableResolutions
     }
 
