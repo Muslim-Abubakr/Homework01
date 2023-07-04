@@ -112,7 +112,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         })
     }
 
-    if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded === undefined) {
+    if (typeof canBeDownloaded !== 'boolean' || typeof canBeDownloaded === undefined) {
         errorResult.push({
             "message": "incorrect canBeDownloaded",
             "field": "canBeDownloaded"  
@@ -175,7 +175,7 @@ app.post('/videos', (req: Request, res: Response) => {
 
     if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions) ) {
         errorResult.push({
-            "message": "Should be a string",
+            "message": "Should be an array",
             "field": "availableResolutions"  
         })
     }
