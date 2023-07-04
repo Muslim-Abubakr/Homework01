@@ -63,7 +63,7 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
     }
 
     videos = videos.filter(v => v.id !== video.id)
-    return res.sendStatus(204)
+    return res.sendStatus(204);
 
 })
 
@@ -91,38 +91,38 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         return;
     }
 
-    if (!title || typeof title !== 'string' || title.trim() || title.length > 40) {
+    if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
         errorResult.push({
             "message": "Incorrect title",
             "field": "title"
         })
     }
 
-    if (!author || typeof author !== 'string' || author.trim() || author.length > 20) {
+    if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
         errorResult.push({
             "message": "Incorrect author",
             "field": "author"
         })
     }
 
-    if (minAgeRestriction.length > 18 || minAgeRestriction < 1 || typeof minAgeRestriction !== null) {
+    if (minAgeRestriction > 18 || minAgeRestriction < 1 || typeof minAgeRestriction === null) {
         errorResult.push({
-            "message": "minAgeRestriction",
+            "message": "incorrect minAgeRestriction",
             "field": "minAgeRestriction"  
         })
     }
 
     if (typeof canBeDownloaded !== 'boolean' && typeof canBeDownloaded === undefined) {
         errorResult.push({
-            "message": "canBeDownloaded",
+            "message": "incorrect canBeDownloaded",
             "field": "canBeDownloaded"  
         })
     }
 
     if (!Array.isArray(availableResolutions) && !permissionValues.includes(availableResolutions)) {
         errorResult.push({
-            "message": "Should be a string",
-            "field": "publicationDate"  
+            "message": "Should be a array",
+            "field": "availableResolutions"  
         })
     }
 
