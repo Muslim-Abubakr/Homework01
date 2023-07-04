@@ -87,7 +87,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === id)
 
     if (!video) {
-        res.sendStatus(HTTP_STATUSES.NO_CONTENT)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return;
     }
 

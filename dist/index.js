@@ -84,7 +84,7 @@ app.put('/videos/:id', (req, res) => {
     let errorResult = [];
     let video = videos.find(v => v.id === id);
     if (!video) {
-        res.sendStatus(HTTP_STATUSES.NO_CONTENT);
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
         return;
     }
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
