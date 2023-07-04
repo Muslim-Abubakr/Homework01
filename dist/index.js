@@ -135,7 +135,9 @@ app.put('/videos/:id', (req, res) => {
     video.canBeDownloaded = canBeDownloaded;
     video.availableResolutions = availableResolutions;
     video.publicationDate = publicationDate;
-    res.sendStatus(HTTP_STATUSES.OK200);
+    if (errorResult.length == 0) {
+        res.sendStatus(HTTP_STATUSES.OK200);
+    }
 });
 app.post('/videos', (req, res) => {
     const title = req.body.title;
@@ -173,7 +175,7 @@ app.post('/videos', (req, res) => {
         "canBeDownloaded": false,
         "minAgeRestriction": null,
         "createdAt": new Date().toISOString(),
-        "publicationDate": new Date(new Date().setDate(new Date().getDate())).toISOString(),
+        "publicationDate": new Date().toISOString(),
         "availableResolutions": availableResolutions
     };
     videos.push(newVideo);

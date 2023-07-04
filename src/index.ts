@@ -147,8 +147,10 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       video.availableResolutions = availableResolutions
       video.publicationDate = publicationDate
       
-
-      res.sendStatus(HTTP_STATUSES.OK200)
+      if (errorResult.length == 0) {
+        res.sendStatus(HTTP_STATUSES.OK200)
+      }
+      
 
 })
 
@@ -195,7 +197,7 @@ app.post('/videos', (req: Request, res: Response) => {
         "canBeDownloaded": false,
         "minAgeRestriction": null,
         "createdAt": new Date().toISOString(),
-        "publicationDate": new Date(new Date().setDate(new Date().getDate())).toISOString(),
+        "publicationDate": new Date().toISOString(),
         "availableResolutions": availableResolutions
     }
 
