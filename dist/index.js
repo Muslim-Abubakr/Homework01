@@ -143,7 +143,6 @@ app.post('/videos', (req, res) => {
     const title = req.body.title;
     const author = req.body.author;
     const availableResolutions = req.body.availableResolutions;
-    const currentDate = new Date();
     let errorResult = [];
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
         errorResult.push({
@@ -175,8 +174,8 @@ app.post('/videos', (req, res) => {
         "author": author,
         "canBeDownloaded": false,
         "minAgeRestriction": null,
-        "createdAt": currentDate.setDate(currentDate.getDate() + 1),
-        "publicationDate": currentDate.setDate(currentDate.getDate() + 1),
+        "createdAt": new Date().toISOString(),
+        "publicationDate": new Date().toISOString(),
         "availableResolutions": availableResolutions
     };
     videos.push(newVideo);

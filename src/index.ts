@@ -158,7 +158,6 @@ app.post('/videos', (req: Request, res: Response) => {
     const title = req.body.title
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
-    const currentDate = new Date();
     let errorResult = []
 
 
@@ -196,8 +195,8 @@ app.post('/videos', (req: Request, res: Response) => {
         "author": author,
         "canBeDownloaded": false,
         "minAgeRestriction": null,
-        "createdAt": currentDate.setDate(currentDate.getDate() + 1),
-        "publicationDate": currentDate.setDate(currentDate.getDate() + 1),
+        "createdAt": new Date().toISOString(),
+        "publicationDate": new Date().toISOString(),
         "availableResolutions": availableResolutions
     }
 
