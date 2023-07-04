@@ -199,7 +199,7 @@ app.post('/videos', (req: Request, res: Response) => {
         "author": author,
         "canBeDownloaded": false,
         "minAgeRestriction": null,
-        "createdAt": isoDate,
+        "createdAt": new Date().toISOString(),
         "publicationDate": isoDate,
         "availableResolutions": availableResolutions
     }
