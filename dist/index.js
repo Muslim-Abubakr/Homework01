@@ -111,7 +111,7 @@ app.put('/videos/:id', (req, res) => {
             "field": "canBeDownloaded"
         });
     }
-    if (!Array.isArray(availableResolutions) || !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(a => Object.keys(permissionValues).includes(a))) {
         errorResult.push({
             "message": "Should be a array",
             "field": "availableResolutions"
@@ -154,7 +154,7 @@ app.post('/videos', (req, res) => {
             "field": "author"
         });
     }
-    if (!Array.isArray(availableResolutions) && !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(a => Object.keys(permissionValues).includes(a))) {
         errorResult.push({
             "message": "Should be an array",
             "field": "availableResolutions"

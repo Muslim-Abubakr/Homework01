@@ -119,7 +119,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         })
     }
 
-    if (!Array.isArray(availableResolutions) || !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(a => Object.keys(permissionValues).includes(a))) {
         errorResult.push({
             "message": "Should be a array",
             "field": "availableResolutions"  
@@ -174,7 +174,7 @@ app.post('/videos', (req: Request, res: Response) => {
         })
       }
 
-    if (!Array.isArray(availableResolutions) && !availableResolutions.every(r => Object.keys(permissionValues).includes(r))) {
+    if (!Array.isArray(availableResolutions) || !availableResolutions.every(a => Object.keys(permissionValues).includes(a))) {
         errorResult.push({
             "message": "Should be an array",
             "field": "availableResolutions"  
