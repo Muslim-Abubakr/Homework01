@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express'
-import bodyParser from 'body-parser'
+import { HTTP_STATUSES } from './statuses/status-code'
 
 const app = express()
 const port = process.env.port || 5000
@@ -27,17 +27,8 @@ let videos = [{
 
 enum permissionValues {P144 = "P144", P240 = "P240", P360 = "P360", P480 = "P480", P720 = "P720", P1080 = "P1080", P1440 = "P1440", P2160 = "P2160"}
 
-const HTTP_STATUSES = {
-    OK200: 200,
-    CREATED_201: 201,
-    NO_CONTENT: 204,
-  
-    BAD_REQUEST_400: 400,
-    NOT_FOUND_404: 404
-  }
-
-const parserMiddleware = bodyParser({})
-app.use(parserMiddleware)
+const jsonBodyMiddleware = express.json({})
+app.use(jsonBodyMiddleware)
 
 app.get('/videos', (req: Request, res: Response) => {
     res.send(videos)
@@ -47,7 +38,7 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     let foundVideo = videos.find(v => v.id === +req.params.id)
 
     if (foundVideo) {
-        res
+        res 
             .status(HTTP_STATUSES.OK200)
             .send(foundVideo)
     } else {
@@ -74,7 +65,6 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 
 app.put('/videos/:id', (req: Request, res: Response) => {
     const id = +req.params.id
-
     const title = req.body.title
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
